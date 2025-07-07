@@ -6,8 +6,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
-        'http://localhost:5173', // Vite
-        'http://localhost:3000', // CRA (React)
+        'https://front.sgtsolutions.in', // Vite
     ],
 
     'allowed_origins_patterns' => [],
