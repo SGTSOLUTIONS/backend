@@ -32,7 +32,6 @@ class ProfileController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'phone' => $user->phone,
-                    // Add other profile fields as needed
                 ]
             ]);
 
@@ -63,7 +62,6 @@ class ProfileController extends Controller
                     Rule::unique('users')->ignore($user->id)
                 ],
                 'phone' => 'nullable|string|max:20',
-                // Add validation for other fields
             ]);
 
             if ($validator->fails()) {
@@ -73,22 +71,11 @@ class ProfileController extends Controller
                 ], 422);
             }
 
-            $user->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                // Update other fields
-            ]);
+            $user->update($request->only(['name', 'email', 'phone']));
 
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    // Return updated fields
-                ],
+                'data' => $user->only(['id', 'name', 'email', 'phone']),
                 'message' => 'Profile updated successfully'
             ]);
 
@@ -108,15 +95,8 @@ class ProfileController extends Controller
     {
         try {
             $user = $request->user();
-
-            // Optional: Add confirmation logic here if needed
-            // For example, check password confirmation
-
-            // Delete the user
-            $user->delete();
-
-            // Revoke all tokens (if using Sanctum)
             $user->tokens()->delete();
+            $user->delete();
 
             return response()->json([
                 'success' => true,

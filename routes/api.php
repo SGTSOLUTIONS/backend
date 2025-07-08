@@ -22,9 +22,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // ✅ Routes accessible by both admin and user
     Route::middleware('role:admin,user')->group(function () {
-        Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
-        Route::put('/profile-update', [ProfileController::class, 'update']);
-        Route::delete('/profile-delete', [ProfileController::class, 'delete']);
+       Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
+    Route::put('/profile-update', [ProfileController::class, 'update']);
+    Route::delete('/profile-delete', [ProfileController::class, 'delete']);
 
         Route::get('/dashboard', function () {
             return response()->json([
