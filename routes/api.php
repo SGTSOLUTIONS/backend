@@ -32,7 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'user' => auth()->user(),
         ]));
 
-        Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
+        Route::get('/user/profile', [ProfileController::class, 'fetch']);
         Route::put('/profile-update', [ProfileController::class, 'update']);
         Route::delete('/profile-delete', [ProfileController::class, 'delete']);
     });
