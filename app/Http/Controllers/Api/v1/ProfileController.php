@@ -16,11 +16,11 @@ class ProfileController extends Controller
     public function fetch(Request $request)
     {
 
-         return response()->json([
+        //  return response()->json([
 
-                'message' => 'Failed to fetch profile',
+        //         'message' => 'Failed to fetch profile',
 
-            ]);
+        //     ]);
         try {
             $user = $request->user();
 
