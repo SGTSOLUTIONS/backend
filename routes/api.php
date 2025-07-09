@@ -13,7 +13,6 @@ Route::middleware(['guest.only'])->group(function () {
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
 });
 
-// 🔐 Authenticated routes (Sanctum required)
 Route::middleware(['auth:sanctum'])->group(function () {
 
     // ✅ Routes accessible by both admin and user
