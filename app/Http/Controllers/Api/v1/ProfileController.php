@@ -8,19 +8,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+
 class ProfileController extends Controller
 {
     /**
      * Fetch authenticated user's profile
      */
+
+
+
+    public function show()
+    {
+        return response()->json(Auth::user());
+    }
     public function fetch(Request $request)
     {
 
-        //  return response()->json([
+         return response()->json([
 
-        //         'message' => 'Failed to fetch profile',
+                'message' => 'Failed to fetch profile',
 
-        //     ]);
+            ]);
         try {
             $user = $request->user();
 
