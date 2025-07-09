@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
-
+use App\Http\Controllers\Api\ForgotPasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -15,6 +15,9 @@ use App\Http\Controllers\Api\ProfileController;
 Route::middleware(['guest.only'])->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
+
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+    Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
 });
 
 // 🔐 Authenticated routes (Sanctum required)
