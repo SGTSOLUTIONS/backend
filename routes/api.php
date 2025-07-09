@@ -4,14 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ForgotPasswordController;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-| Authenticated, role-based, and guest-only route groups using Sanctum.
-*/
 
-// 🚫 Guest-only routes (Unauthenticated users only)
 Route::middleware(['guest.only'])->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
