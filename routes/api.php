@@ -10,17 +10,20 @@ Route::middleware(['guest.only'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
 
     Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink']);
+    Route::post('/submit-otp', [ForgotPasswordController::class, 'verifyOtp']);
+
     Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     // ✅ Routes accessible by both admin and user
-    Route::middleware('role:admin,user')->group(function () {
-       Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
-    Route::put('/profile-update', [ProfileController::class, 'update']);
+    // Route::middleware('role:admin,user')->group(function () {
+    // Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
+    // Route::put('/profile-update', [ProfileController::class, 'update']);
     Route::delete('/profile-delete', [ProfileController::class, 'delete']);
 
+    // Route::get('/profile-fetch' ,[ProfileController::class,'fetch'] );
         Route::get('/dashboard', function () {
             return response()->json([
                 'message' => 'Welcome User or Admin',
@@ -31,6 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // 🔒 Admin-only routes
     Route::middleware('role:admin')->group(function () {
+         Route::get('/profile-fetch', [ProfileController::class, 'fetch']);
+    Route::put('/profile-update', [ProfileController::class, 'update']);
+    Route::delete('/profile-delete', [ProfileController::class, 'delete']);
         Route::get('/admin-only', function () {
             return response()->json(['message' => 'Welcome Admin']);
         });

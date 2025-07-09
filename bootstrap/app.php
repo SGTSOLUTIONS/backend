@@ -15,7 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
          $middleware->alias([
-            'admin' => RoleMiddleware::class,
+            'role' => RoleMiddleware::class,
             'guest.only' => GuestOnly::class,
 
         ]);
