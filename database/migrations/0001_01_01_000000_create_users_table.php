@@ -11,19 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+       Schema::create('users', function (Blueprint $table) {
             $table->id();
+
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            // Role column for enum-based access control
-            $table->string('role')->default('user');
+            // ✅ Role-based access control
+            $table->string('role')->default('user'); // e.g., admin, manager, user
+
+            // ✅ New profile fields
+            $table->string('phone')->nullable();           // Optional phone
+            $table->string('avatar')->nullable();          // Image path
+            $table->text('address')->nullable();           // Optional address
+            $table->string('designation')->nullable();     // For admin/manager roles
+            $table->date('dob')->nullable();               // Date of birth (if needed)
+            $table->enum('gender', ['male', 'female', 'other'])->nullable(); // Optional gender
 
             $table->rememberToken();
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

@@ -1,128 +1,108 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\v1;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-    /**
-     * Fetch authenticated user's profile
-     */
-
-
-
     public function show()
     {
-        return response()->json(Auth::user());
-    }
-    public function fetch(Request $request)
-    {
+        $user = Auth::user();
 
-         return response()->json([
-
-                'message' => 'Failed to fetch profile',
-
-            ]);
-        try {
-            $user = $request->user();
-
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User not authenticated'
-                ], 401);
-            }
-
-            return response()->json([
-                'success' => true,
-                'data' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                ]
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to fetch profile',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'success' => true,
+            'data' => $this->formatUserData($user)
+        ]);
     }
 
-    /**
-     * Update user profile
-     */
     public function update(Request $request)
     {
-        try {
-            $user = $request->user();
+        $user = Auth::user();
 
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => [
-                    'required',
-                    'string',
-                    'email',
-                    'max:255',
-                    Rule::unique('users')->ignore($user->id)
-                ],
-                'phone' => 'nullable|string|max:20',
-            ]);
+        $rules = [
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|max:255|unique:users,email,'.$user->id,
+            'password' => ['sometimes', 'nullable', Password::defaults()],
+            'role' => 'sometimes|required|string|in:user,admin,manager',
+            'phone' => 'sometimes|nullable|string|max:20',
+            'address' => 'sometimes|nullable|string|max:500',
+            'designation' => 'sometimes|nullable|string|max:255',
+            'dob' => 'sometimes|nullable|date',
+            'gender' => 'sometimes|nullable|string|in:male,female,other,prefer-not-to-say',
+            'avatar' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ];
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'errors' => $validator->errors()
-                ], 422);
+        $validated = $request->validate($rules);
+
+        // Handle file upload
+        if ($request->hasFile('avatar')) {
+            // Delete old avatar if exists
+            if ($user->avatar) {
+                Storage::delete($user->avatar);
             }
-
-            $user->update($request->only(['name', 'email', 'phone']));
-
-            return response()->json([
-                'success' => true,
-                'data' => $user->only(['id', 'name', 'email', 'phone']),
-                'message' => 'Profile updated successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update profile',
-                'error' => $e->getMessage()
-            ], 500);
+            $path = $request->file('avatar')->store('avatars');
+            $validated['avatar'] = $path;
         }
+
+        // Hash password if provided
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'data' => $this->formatUserData($user->fresh()),
+            'message' => 'Profile updated successfully'
+        ]);
     }
 
-    /**
-     * Delete user profile
-     */
-    public function delete(Request $request)
+    public function destroy()
     {
-        try {
-            $user = $request->user();
-            $user->tokens()->delete();
-            $user->delete();
+        $user = Auth::user();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Profile deleted successfully'
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete profile',
-                'error' => $e->getMessage()
-            ], 500);
+        // Delete avatar if exists
+        if ($user->avatar) {
+            Storage::delete($user->avatar);
         }
+
+        // Logout before deleting
+        Auth::logout();
+
+        // Delete user
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Account deleted successfully'
+        ]);
+    }
+
+    private function formatUserData(User $user)
+    {
+        return [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'phone' => $user->phone,
+            'avatar' => $user->avatar ? Storage::url($user->avatar) : null,
+            'address' => $user->address,
+            'designation' => $user->designation,
+            'dob' => $user->dob,
+            'gender' => $user->gender,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ];
     }
 }

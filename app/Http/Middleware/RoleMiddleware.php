@@ -4,16 +4,23 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use App\Enums\UserRole;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if (!$request->user() || $request->user()->role->value !== $role) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        $user = $request->user();
+if ($user ){
 
         return $next($request);
+  }
+        if (!$user || !in_array($user->role, $roles)) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+  if ($user ){
+
+        return $next($request);
+  }
     }
 }

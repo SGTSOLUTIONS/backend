@@ -4,10 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\AuthController;
 use App\Http\Controllers\Api\v1\ProfileController;
 use App\Http\Controllers\Api\v1\ForgotPasswordController;
+use App\Http\Controllers\Api\v1\LayerController;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| api Routes
 |--------------------------------------------------------------------------
 */
 
@@ -31,10 +32,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
             'message' => 'Welcome User or Admin',
             'user' => auth()->user(),
         ]));
-
-        Route::get('/user/profile', [ProfileController::class, 'show']);
-        Route::put('/profile-update', [ProfileController::class, 'update']);
-        Route::delete('/profile-delete', [ProfileController::class, 'delete']);
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::patch('/profile', [ProfileController::class, 'update']);
+    Route::delete('/profile', [ProfileController::class, 'destroy']);
     });
 
     // 🔒 Admin-only routes
@@ -42,6 +42,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/admin-only', fn () => response()->json([
             'message' => 'Welcome Admin'
         ]));
+        Route::post('/createlayers', [LayerController::class ,'store']);
+        Route::get('/fetch-layers', [LayerController::class ,'fetch']);
     });
 
     // 🔓 Logout route

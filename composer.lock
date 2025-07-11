@@ -1295,7 +1295,7 @@
                 "resend/resend-php": "Required to enable support for the Resend mail transport (^0.10.0).",
                 "symfony/cache": "Required to PSR-6 cache bridge (^7.2).",
                 "symfony/filesystem": "Required to enable support for relative symbolic links (^7.2).",
-                "symfony/http-client": "Required to enable support for the Symfony API mail transports (^7.2).",
+                "symfony/http-client": "Required to enable support for the Symfony api mail transports (^7.2).",
                 "symfony/mailgun-mailer": "Required to enable support for the Mailgun mail transport (^7.2).",
                 "symfony/postmark-mailer": "Required to enable support for the Postmark mail transport (^7.2).",
                 "symfony/psr-http-message-bridge": "Required to use PSR-7 bridging features (^7.2)."
@@ -1459,7 +1459,7 @@
                     "email": "taylor@laravel.com"
                 }
             ],
-            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.",
+            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple apis.",
             "keywords": [
                 "auth",
                 "laravel",
@@ -2514,7 +2514,7 @@
                     "homepage": "https://github.com/kylekatarnls"
                 }
             ],
-            "description": "An API extension for DateTime that supports 281 different languages.",
+            "description": "An api extension for DateTime that supports 281 different languages.",
             "homepage": "https://carbon.nesbot.com",
             "keywords": [
                 "date",
@@ -5579,7 +5579,7 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Provides an object-oriented API to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way",
+            "description": "Provides an object-oriented api to strings and deals with bytes, UTF-8 code points and grapheme clusters in a unified way",
             "homepage": "https://symfony.com",
             "keywords": [
                 "grapheme",
@@ -5830,7 +5830,7 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Provides an object-oriented API to generate and represent UIDs",
+            "description": "Provides an object-oriented api to generate and represent UIDs",
             "homepage": "https://symfony.com",
             "keywords": [
                 "UID",
