@@ -26,7 +26,9 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'], //add your allowed origins
+    'allowed_origins' => [
+        'https://front.sgtsolutions.in',
+    ],
 
     'allowed_origins_patterns' => [],
 
