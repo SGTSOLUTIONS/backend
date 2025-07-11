@@ -12,6 +12,8 @@ use App\Http\Controllers\Api\v1\LayerController;
 |--------------------------------------------------------------------------
 */
 
+Route::middleware(['cors'])->group(function () {
+
 // 🚫 Guest-only routes (Unauthenticated only)
 Route::middleware(['guest.only'])->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
@@ -48,4 +50,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // 🔓 Logout route
     Route::post('/logout', [AuthController::class, 'logout']);
+});
 });
